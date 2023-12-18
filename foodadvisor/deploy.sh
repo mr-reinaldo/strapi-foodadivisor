@@ -12,5 +12,3 @@ docker build -t foodadvisor-client:1.0.0 ./client
 
 # Instala a aplicação no cluster
 helm install foodadvisor ./strapi-foodadvisor
-
-# Fim

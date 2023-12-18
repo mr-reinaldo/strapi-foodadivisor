@@ -1,16 +1,22 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-ingress
+  name: ingress-backend
+
+  {{- with .Values.IngressBackend.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
+  ingressClassName: nignx
   rules:
-  - host: {{ .Release.Name }}.client
-    http:
-      paths:
-      - path: /client
-        pathType: Prefix
-        backend:
-          service:
-            name: {{ .Release.Name }}-frontend
-            port:
-              number: 3000
+    - host: {{ .Values.IngressBackend.host }}
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name}}-backend
+                port:
+                  number: {{ .Values.serviceBackend.port }}

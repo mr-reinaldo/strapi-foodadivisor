@@ -2,6 +2,7 @@ foodadviserApi:
   image:
     repository: "foodadvisor-api"
     tag: "1.0.0"
+  resplicaCount: 1
   pullPolicy: IfNotPresent
   resources: {}
 
@@ -10,19 +11,26 @@ foodadvisorClient:
   image:
     repository: "foodadvisor-client"
     tag: "1.0.0"
+  resplicaCount: 1
   pullPolicy: IfNotPresent
   resources: {}
 
 serviceBackend:
-  name: strapi-foodadvisor-api
   type: ClusterIP
   port: 1337
-  selector:
-    app: strapi-foodadvisor-api
+  targetPort: 1337
 
 serviceFrontend:
-  name: strapi-foodadvisor-client
   type: ClusterIP
   port: 3000
-  selector:
-    app: strapi-foodadvisor-client
+  targetPort: 3000
+
+IngressFrontend:
+  annotations:
+  # nginx.ingress.kubernetes.io/rewrite-target: /
+  host: foodadvisor.client.com
+
+IngressBackend:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  host: foodadvisor.api.com

@@ -2,16 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-frontend
+  labels:
+    app: {{ .Release.Name }}-frontend
 spec:
+  replicas: {{ .Values.foodadvisorClient.resplicaCount }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-frontend
-      component: frontend
   template:
     metadata:
       labels:
         app: {{ .Release.Name }}-frontend
-        component: frontend
     spec:
       containers:
       - name: {{ .Release.Name }}-frontend
