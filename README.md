@@ -35,3 +35,13 @@ kubectl get pods
 # Lista os deployments
 kubectl get deployments
 ```
+
+## IMAGEM DO DEPLOYMENT
+
+![Alt text](image.png)
+
+
+![Alt text](image-1.png)
+
+
+![Alt text](image-2.png)
