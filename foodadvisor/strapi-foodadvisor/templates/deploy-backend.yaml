@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name}}-backend
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name}}-backend
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name}}-backend
+        component: backend
+    spec:
+      containers:
+      - name: {{ .Release.Name}}-backend
+        image: {{ .Values.foodadviserApi.image.repository }}:{{ .Values.foodadviserApi.image.tag }}
+        imagePullPolicy: {{ .Values.foodadviserApi.pullPolicy }}
+        ports:
+        - containerPort: 1337
+        resources:
+          {{- toYaml .Values.foodadviserApi.resources | nindent 12 }}

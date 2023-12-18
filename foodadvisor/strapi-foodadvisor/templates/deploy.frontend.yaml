@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-frontend
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-frontend
+      component: frontend
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-frontend
+        component: frontend
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-frontend
+        image: {{ .Values.foodadvisorClient.image.repository }}:{{ .Values.foodadvisorClient.image.tag }}
+        imagePullPolicy: {{ .Values.foodadvisorClient.pullPolicy }}
+        ports:
+        - containerPort: 3000
+        resources: {{ toYaml .Values.foodadvisorClient.resources | indent 10 }}

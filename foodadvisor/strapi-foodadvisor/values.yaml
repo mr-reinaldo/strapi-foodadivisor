@@ -1,0 +1,28 @@
+foodadviserApi:
+  image:
+    repository: "foodadvisor-api"
+    tag: "1.0.0"
+  pullPolicy: IfNotPresent
+  resources: {}
+
+
+foodadvisorClient:
+  image:
+    repository: "foodadvisor-client"
+    tag: "1.0.0"
+  pullPolicy: IfNotPresent
+  resources: {}
+
+serviceBackend:
+  name: strapi-foodadvisor-api
+  type: ClusterIP
+  port: 1337
+  selector:
+    app: strapi-foodadvisor-api
+
+serviceFrontend:
+  name: strapi-foodadvisor-client
+  type: ClusterIP
+  port: 3000
+  selector:
+    app: strapi-foodadvisor-client
