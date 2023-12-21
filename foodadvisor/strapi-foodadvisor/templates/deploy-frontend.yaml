@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.foodadvisorClient.deployment.name }}
+spec:
+  replicas: {{ .Values.foodadvisorClient.deployment.replicas }}
+  selector:
+    matchLabels:
+      {{ .Values.foodadvisorClient.labels | toYaml | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{ .Values.foodadvisorClient.labels | toYaml | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Values.foodadvisorClient.deployment.name }}
+        image: {{ .Values.foodadvisorClient.deployment.image.repository }}:{{ .Values.foodadvisorClient.deployment.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.foodadvisorClient.deployment.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.foodadvisorClient.deployment.image.ports.containerPort }}
+        env:
+          {{- toYaml .Values.foodadvisorClient.extraEnvs | nindent 12 }}

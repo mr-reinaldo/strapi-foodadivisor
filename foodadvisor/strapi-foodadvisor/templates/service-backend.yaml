@@ -1,14 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-    name: {{ .Release.Name}}-backend
-    labels:
-        app: {{ .Release.Name}}-backend
+  name: {{ .Values.foodadvisorApi.service.name }}
+  labels:
+    {{ .Values.foodadvisorApi.labels | toYaml | nindent 4 }}
 spec:
-    type: {{ .Values.serviceBackend.type }}
-    ports:
-        - port: {{ .Values.serviceBackend.port }}
-          protocol: TCP
-          targetPort: {{ .Values.serviceBackend.targetPort }}
-    selector:
-        app: {{ .Release.Name}}-backend
+  type: {{ .Values.foodadvisorApi.service.type }}
+  ports:
+    - port: {{ .Values.foodadvisorApi.service.ports.port }}
+      targetPort: {{ .Values.foodadvisorApi.service.ports.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{ .Values.foodadvisorApi.labels | toYaml | nindent 4 }}

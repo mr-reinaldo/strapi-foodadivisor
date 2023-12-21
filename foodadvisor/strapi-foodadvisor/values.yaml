@@ -1,36 +1,119 @@
-foodadviserApi:
-  image:
-    repository: "foodadvisor-api"
-    tag: "1.0.0"
-  resplicaCount: 1
-  pullPolicy: IfNotPresent
-  resources: {}
+replicaCount: 1
 
+foodadvisorApi:
+  labels:
+    app: foodadvisor-api
+    component: api
+
+  deployment:
+    name: foodadvisor-api
+    replicas: 1
+    image:
+      repository: foodadvisor-api
+      tag: "0.0.1"
+      pullPolicy: IfNotPresent
+      ports:
+        containerPort: 1337
+
+  service:
+    name: foodadvisor-api
+    type: ClusterIP
+    ports:
+      port: 80
+      targetPort: 1337
+
+  ingress:
+    name: foodadvisor-api
+    enabled: true
+    annotations: {}
+    className: "nginx"
+    hosts:
+    - host: api-foodadvisor.com
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: foodadvisor-api
+            port:
+              number: 1337
+    tls: []
+
+  # secret:
+  #   name: strapifoodadvisor
+  #   host: strapi-foodadvisor-postgresql
+  #   port: "5432"
+  #   username: strapi
+  #   password: strapi
+  #   database: strapi
+
+  # extraEnvs:
+  # - name: DATABASE_HOST
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: strapifoodadvisor
+  #       key: host
+  # - name: DATABASE_PORT
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: strapifoodadvisor
+  #       key: port
+  # - name: DATABASE_USERNAME
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: strapifoodadvisor
+  #       key: username
+  # - name: DATABASE_PASSWORD
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: strapifoodadvisor
+  #       key: password
+  # - name: DATABASE_NAME
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: strapifoodadvisor
+  #       key: database
+  # - name: DATABASE_CLIENT
+  #   value: postgres
 
 foodadvisorClient:
-  image:
-    repository: "foodadvisor-client"
-    tag: "1.0.0"
-  resplicaCount: 1
-  pullPolicy: IfNotPresent
-  resources: {}
+  labels:
+    app: foodadvisor-client
+    component: client
 
-serviceBackend:
-  type: ClusterIP
-  port: 1337
-  targetPort: 1337
+  deployment:
+    name: foodadvisor-client
+    replicas: 1
+    image:
+      repository: foodadvisor-client
+      tag: "0.0.1"
+      pullPolicy: IfNotPresent
+      ports:
+        containerPort: 3000
 
-serviceFrontend:
-  type: ClusterIP
-  port: 3000
-  targetPort: 3000
+  service:
+    name: foodadvisor-client
+    type: ClusterIP
+    ports:
+      port: 80
+      targetPort: 3000
 
-IngressFrontend:
-  annotations:
-  # nginx.ingress.kubernetes.io/rewrite-target: /
-  host: foodadvisor.client.com
+  ingress:
+    name: foodadvisor-client
+    enabled: true
+    annotations: {}
+    className: "nginx"
+    hosts:
+    - host: client-foodadvisor.com
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: foodadvisor-client
+            port:
+              number: 3000
 
-IngressBackend:
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-  host: foodadvisor.api.com
+    tls: []
+
+  extraEnvs: []

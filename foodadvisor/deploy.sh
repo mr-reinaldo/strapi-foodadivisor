@@ -4,10 +4,10 @@
 eval $(minikube docker-env)
 
 # Builda a imagem da API (./api)
-docker build -t foodadvisor-api:1.0.0 ./api
+docker build -t foodadvisor-api:0.0.1 ./api
 
 # Builda a imagem do front (./client)
-docker build -t foodadvisor-client:1.0.0 ./client
+docker build -t foodadvisor-client:0.0.1 ./client
 
 
 # Instala a aplicação no cluster

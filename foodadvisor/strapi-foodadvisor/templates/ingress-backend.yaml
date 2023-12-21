@@ -1,15 +1,15 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
-metadata:
-  name: {{ .Values.foodadvisorClient.ingress.name }}
-  annotations:
-    {{- range .Values.foodadvisorClient.ingress.annotations }}
-    {{ .name }}: {{ .value | quote }}
+metadata: 
+    name: {{ .Values.foodadvisorApi.ingress.name }}
+    annotations:
+    {{- range .Values.foodadvisorApi.ingress.annotations }}
+        {{ .name }}: {{ .value | quote }}
     {{- end }}
 spec:
-  ingressClassName: {{ .Values.foodadvisorClient.ingress.className | quote }}
+  ingressClassName: {{ .Values.foodadvisorApi.ingress.className | quote }}
   rules:
-    {{- range .Values.foodadvisorClient.ingress.hosts }}
+    {{- range .Values.foodadvisorApi.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
@@ -23,4 +23,3 @@ spec:
                   number: {{ .backend.service.port.number }}
           {{- end }}
     {{- end }}
-    

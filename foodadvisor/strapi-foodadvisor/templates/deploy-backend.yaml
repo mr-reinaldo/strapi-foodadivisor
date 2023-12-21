@@ -1,23 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name}}-backend
-  labels:
-    app: {{ .Release.Name}}-backend
+  name: {{ .Values.foodadvisorApi.deployment.name }}
 spec:
-  replicas: {{ .Values.foodadviserApi.resplicaCount }}
+  replicas: {{ .Values.foodadvisorApi.deployment.replicas }}
   selector:
     matchLabels:
-      app: {{ .Release.Name}}-backend
+      {{ .Values.foodadvisorApi.labels | toYaml | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name}}-backend
+        {{ .Values.foodadvisorApi.labels | toYaml | nindent 8 }}
     spec:
       containers:
-      - name: {{ .Release.Name}}-backend
-        image: {{ .Values.foodadviserApi.image.repository }}:{{ .Values.foodadviserApi.image.tag }}
-        imagePullPolicy: {{ .Values.foodadviserApi.pullPolicy }}
+      - name: {{ .Values.foodadvisorApi.deployment.name }}
+        image: {{ .Values.foodadvisorApi.deployment.image.repository }}:{{ .Values.foodadvisorApi.deployment.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.foodadvisorApi.deployment.image.pullPolicy }}
         ports:
-          - containerPort: 1337
-        resources: {{- toYaml .Values.foodadviserApi.resources | nindent 12 }}
+        - containerPort: {{ .Values.foodadvisorApi.deployment.image.ports.containerPort }}
+        env:
+          {{- toYaml .Values.foodadvisorApi.extraEnvs | nindent 12 }}
